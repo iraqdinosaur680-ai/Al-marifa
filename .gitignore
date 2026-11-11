@@ -1,0 +1,94 @@
+# ==========================================
+# Dependencies
+# ==========================================
+node_modules/
+/.pnp
+.pnp.js
+
+# ==========================================
+# Production & Build Outputs
+# ==========================================
+dist/
+dist-server/
+dist-ssr/
+build/
+out/
+coverage/
+*.tsbuildinfo
+
+# ==========================================
+# Environment Variables & Secrets
+# ==========================================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env*.local
+*.pem
+*.key
+*.cert
+
+# Allow environment template
+!.env.example
+
+# ==========================================
+# Logs & Diagnostic Files
+# ==========================================
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ==========================================
+# Editor & OS Artifacts
+# ==========================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# ==========================================
+# Android Native Build & Keystore
+# ==========================================
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+android/*.iml
+android/.idea/
+*.jks
+*.keystore
+android/app/google-services.json
+android/app/src/main/assets/public/
+android/app/src/main/assets/capacitor.config.json
+android/app/src/main/assets/capacitor.plugins.json
+android/app/src/main/res/xml/config.xml
+android/capacitor-cordova-android-plugins/
+
+# ==========================================
+# iOS Native Build & Pods
+# ==========================================
+ios/DerivedData/
+ios/App/build/
+ios/App/Pods/
+ios/App/App/public/
+ios/App/App/capacitor.config.json
+ios/App/App/config.xml
+ios/capacitor-cordova-ios-plugins/
+*.xcuserstate
+project.xcworkspace/xcuserdata/
+*.moved-aside

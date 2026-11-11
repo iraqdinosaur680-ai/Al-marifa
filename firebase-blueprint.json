@@ -1,0 +1,175 @@
+{
+  "entities": {
+    "admin": {
+      "title": "Admin",
+      "description": "Administrator account with permissions to manage students, videos, attendance, exams, and other admins.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique identifier, e.g. phone number" },
+        "name": { "type": "string", "description": "Full name of the admin" },
+        "phone": { "type": "string", "description": "Contact and login phone number" },
+        "password": { "type": "string", "description": "Login password" },
+        "permissions": { "type": "array", "description": "Permissions assigned to this administrator" },
+        "isSuperAdmin": { "type": "boolean", "description": "Flag indicating if the admin is a super admin" }
+      },
+      "required": ["id", "name", "phone", "password"]
+    },
+    "student": {
+      "title": "Student",
+      "description": "Student account containing academics, attendance metrics, custom notes, and security state.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique phone number of the student" },
+        "name": { "type": "string", "description": "Full name of the student" },
+        "phone": { "type": "string", "description": "Login phone number for student access" },
+        "parentPhone": { "type": "string", "description": "Login phone number for parent access" },
+        "academicYear": { "type": "string", "description": "ID of the student's current academic year" },
+        "groupId": { "type": "string", "description": "ID of assigned group" },
+        "gender": { "type": "string", "enum": ["male", "female"], "description": "Student gender" },
+        "password": { "type": "string", "description": "Automatically generated security password" },
+        "parentPassword": { "type": "string", "description": "Automatically generated parent password" },
+        "studentCode": { "type": "string", "description": "Optional student identification code" },
+        "enabled": { "type": "boolean", "description": "Flag indicating if the account is active" },
+        "notes": { "type": "string", "description": "Private administrative or academic notes about this student" },
+        "createdDate": { "type": "string", "format": "date-time", "description": "Timestamp when account was created" },
+        "updatedDate": { "type": "string", "format": "date-time", "description": "Timestamp of last modification" }
+      },
+      "required": ["id", "name", "phone", "parentPhone", "academicYear", "password", "enabled"]
+    },
+    "attendance_record": {
+      "title": "Attendance Record",
+      "description": "A single day attendance logging for a student.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Format: {studentPhone}_{date}" },
+        "studentPhone": { "type": "string", "description": "Reference student phone" },
+        "studentName": { "type": "string", "description": "Name of the student for easier rendering" },
+        "date": { "type": "string", "format": "date", "description": "Attendance date in YYYY-MM-DD format" },
+        "status": { "type": "string", "enum": ["present", "absent", "late"], "description": "Status of attendance" }
+      },
+      "required": ["id", "studentPhone", "studentName", "date", "status"]
+    },
+    "grade_record": {
+      "title": "Grade Record",
+      "description": "An exam result scorecard for a student.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique identifier of the record" },
+        "examName": { "type": "string", "description": "Name of the exam or test" },
+        "examDate": { "type": "string", "format": "date", "description": "Date when the exam was held" },
+        "totalMarks": { "type": "number", "description": "Maximum marks possible for this exam" },
+        "studentPhone": { "type": "string", "description": "Reference student phone" },
+        "studentName": { "type": "string", "description": "Name of the student for easier rendering" },
+        "score": { "type": "number", "description": "Score obtained by the student" }
+      },
+      "required": ["id", "examName", "examDate", "totalMarks", "studentPhone", "studentName", "score"]
+    },
+    "video": {
+      "title": "Video",
+      "description": "Video detail linked to Cloudflare Stream with playback attributes.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique identifier of the video" },
+        "title": { "type": "string", "description": "Title of the educational video" },
+        "description": { "type": "string", "description": "Short description of video content" },
+        "thumbnailUrl": { "type": "string", "description": "URL to the preview thumbnail image" },
+        "duration": { "type": "string", "description": "Formatted duration (e.g. 12:34)" },
+        "academicYear": { "type": "string", "description": "Academic year ID required to access this video" },
+        "category": { "type": "string", "description": "Subject category or unit name" },
+        "displayOrder": { "type": "number", "description": "Custom sorting index" },
+        "visibility": { "type": "string", "enum": ["public", "hidden"], "description": "Visibility flag" },
+        "cloudflareId": { "type": "string", "description": "Cloudflare Stream Video ID" },
+        "signedUrl": { "type": "boolean", "description": "Whether signed URL playback is mandatory" }
+      },
+      "required": ["id", "title", "cloudflareId", "academicYear", "visibility"]
+    },
+    "academic_year": {
+      "title": "Academic Year",
+      "description": "An academic session grouping students and material.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique year ID, e.g. '2025'" },
+        "name": { "type": "string", "description": "Label of the year, e.g. 'Class of 2025'" }
+      },
+      "required": ["id", "name"]
+    },
+    "group": {
+      "title": "Group",
+      "description": "Numbered male or female school group associated with an academic year.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique group ID, e.g. 'grp_2025_male_1'" },
+        "academicYear": { "type": "string", "description": "ID of academic year" },
+        "groupNumber": { "type": "string", "description": "Group number or code" },
+        "gender": { "type": "string", "enum": ["male", "female"], "description": "Gender for this group" },
+        "name": { "type": "string", "description": "Group display name" }
+      },
+      "required": ["id", "academicYear", "groupNumber", "gender"]
+    },
+    "notification": {
+      "title": "Notification",
+      "description": "Notification broadcast metadata logged for user tracking.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique notification identifier" },
+        "title": { "type": "string", "description": "Title of the alert" },
+        "body": { "type": "string", "description": "Full text payload" },
+        "target": { "type": "string", "description": "Target audience (all, year_{id}, student_{phone}, parent_{phone})" },
+        "sentAt": { "type": "string", "format": "date-time", "description": "Timestamp when triggered" }
+      },
+      "required": ["id", "title", "body", "target", "sentAt"]
+    },
+    "bookmark": {
+      "title": "Bookmark",
+      "description": "A saved video timestamp with optional notes or descriptions created by a student.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique identifier of the bookmark" },
+        "studentPhone": { "type": "string", "description": "Phone number of the student who created this bookmark" },
+        "videoId": { "type": "string", "description": "ID of the video this bookmark belongs to" },
+        "timestamp": { "type": "number", "description": "The exact time in seconds in the video" },
+        "note": { "type": "string", "description": "Optional note or title for the bookmark" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Timestamp when the bookmark was created" }
+      },
+      "required": ["id", "studentPhone", "videoId", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/admins/{adminId}": {
+      "schema": "admin",
+      "description": "List of administrators with authentication and role credentials."
+    },
+    "/students/{studentId}": {
+      "schema": "student",
+      "description": "List of active and inactive students."
+    },
+    "/attendance/{attendanceId}": {
+      "schema": "attendance_record",
+      "description": "Global list of attendance markers linked to student phone numbers."
+    },
+    "/grades/{gradeId}": {
+      "schema": "grade_record",
+      "description": "Global registry of exam scoring papers."
+    },
+    "/videos/{videoId}": {
+      "schema": "video",
+      "description": "Educational lecture materials streamed via Cloudflare."
+    },
+    "/years/{yearId}": {
+      "schema": "academic_year",
+      "description": "Academic sessions groupings."
+    },
+    "/groups/{groupId}": {
+      "schema": "group",
+      "description": "Academic year sub-groups for male and female students."
+    },
+    "/notifications/{notificationId}": {
+      "schema": "notification",
+      "description": "History of alerts issued by admins."
+    },
+    "/bookmarks/{bookmarkId}": {
+      "schema": "bookmark",
+      "description": "Student video bookmarks for saved timestamps."
+    }
+  }
+}

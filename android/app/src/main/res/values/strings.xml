@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">المنصة التعليمية</string>
+    <string name="title_activity_main">المنصة التعليمية</string>
+    <string name="package_name">com.educational.portal</string>
+    <string name="custom_url_scheme">com.educational.portal</string>
+</resources>

@@ -1,0 +1,34 @@
+{
+  "appId": "com.educational.portal",
+  "appName": "المنصة التعليمية",
+  "webDir": "dist",
+  "bundledWebRuntime": false,
+  "backgroundColor": "#090d16",
+  "server": {
+    "androidScheme": "https",
+    "iosScheme": "https",
+    "cleartext": true
+  },
+  "android": {
+    "backgroundColor": "#090d16",
+    "allowMixedContent": true,
+    "captureInput": false,
+    "webContentsDebuggingEnabled": true
+  },
+  "ios": {
+    "backgroundColor": "#090d16",
+    "contentInset": "automatic",
+    "preferredContentMode": "mobile",
+    "scrollEnabled": true,
+    "allowsLinkPreview": false,
+    "limitsNavigationsToAppBoundDomains": false,
+    "allowsInlineMediaPlayback": true
+  },
+  "plugins": {
+    "StatusBar": {
+      "overlaysWebView": false,
+      "style": "DARK",
+      "backgroundColor": "#090d16"
+    }
+  }
+}

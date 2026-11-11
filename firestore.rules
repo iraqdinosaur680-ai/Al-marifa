@@ -1,0 +1,136 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128;
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    // Schema Validators
+    function isValidAdmin(data) {
+      return data.keys().hasAll(['id', 'name', 'phone', 'password']) &&
+             data.keys().size() <= 8 &&
+             data.id is string && data.id.size() > 0 &&
+             data.name is string && data.name.size() > 0 &&
+             data.phone is string && data.phone.size() >= 1 &&
+             data.password is string && data.password.size() > 0;
+    }
+
+    function isValidStudent(data) {
+      return data.keys().hasAll(['id', 'name', 'phone', 'parentPhone', 'academicYear', 'password', 'enabled']) &&
+             data.keys().size() <= 16 &&
+             data.id is string && data.id.size() > 0 &&
+             data.name is string && data.name.size() > 0 &&
+             data.phone is string && data.phone.size() >= 1 &&
+             data.parentPhone is string && data.parentPhone.size() >= 1 &&
+             data.academicYear is string && data.academicYear.size() > 0 &&
+             data.password is string && data.password.size() > 0 &&
+             data.enabled is bool;
+    }
+
+    function isValidAttendance(data) {
+      return data.keys().hasAll(['id', 'studentPhone', 'studentName', 'date', 'status']) &&
+             data.keys().size() == 5 &&
+             data.id is string && data.studentPhone is string &&
+             data.date is string && data.status in ['present', 'absent', 'late'];
+    }
+
+    function isValidGrade(data) {
+      return data.keys().hasAll(['id', 'examName', 'examDate', 'totalMarks', 'studentPhone', 'studentName', 'score']) &&
+             data.keys().size() == 7 &&
+             data.id is string && data.studentPhone is string &&
+             data.score is number && data.totalMarks is number;
+    }
+
+    function isValidVideo(data) {
+      return data.keys().hasAll(['id', 'title', 'cloudflareId', 'academicYear', 'visibility']) &&
+             data.keys().size() <= 12 &&
+             data.id is string && data.title is string &&
+             data.cloudflareId is string && data.visibility in ['public', 'hidden'];
+    }
+
+    function isValidAcademicYear(data) {
+      return data.keys().hasAll(['id', 'name']) &&
+             data.keys().size() == 2 &&
+             data.id is string && data.name is string;
+    }
+
+    function isValidGroup(data) {
+      return data.keys().hasAll(['id', 'academicYear', 'groupNumber', 'gender']) &&
+             data.keys().size() <= 6 &&
+             data.id is string && data.academicYear is string &&
+             data.groupNumber is string && data.gender in ['male', 'female'];
+    }
+
+    function isValidNotification(data) {
+      return data.keys().hasAll(['id', 'title', 'body', 'target', 'sentAt']) &&
+             data.keys().size() == 5 &&
+             data.id is string && data.title is string &&
+             data.body is string && data.target is string;
+    }
+
+    function isValidBookmark(data) {
+      return data.keys().hasAll(['id', 'studentPhone', 'videoId', 'timestamp']) &&
+             data.keys().size() <= 6 &&
+             data.id is string && data.studentPhone is string &&
+             data.videoId is string && data.timestamp is number;
+    }
+
+    // Rules for all collections
+    match /admins/{adminId} {
+      allow read: if true;
+      allow write: if isValidId(adminId) && isValidAdmin(incoming());
+    }
+
+    match /students/{studentId} {
+      allow read: if true;
+      allow write: if isValidId(studentId) && isValidStudent(incoming());
+    }
+
+    match /attendance/{attendanceId} {
+      allow read: if true;
+      allow write: if isValidId(attendanceId) && isValidAttendance(incoming());
+    }
+
+    match /grades/{gradeId} {
+      allow read: if true;
+      allow write: if isValidId(gradeId) && isValidGrade(incoming());
+    }
+
+    match /videos/{videoId} {
+      allow read: if true;
+      allow write: if isValidId(videoId) && isValidVideo(incoming());
+    }
+
+    match /years/{yearId} {
+      allow read: if true;
+      allow write: if isValidId(yearId) && isValidAcademicYear(incoming());
+    }
+
+    match /groups/{groupId} {
+      allow read: if true;
+      allow write: if isValidId(groupId) && isValidGroup(incoming());
+    }
+
+    match /notifications/{notificationId} {
+      allow read: if true;
+      allow write: if isValidId(notificationId) && isValidNotification(incoming());
+    }
+
+    match /bookmarks/{bookmarkId} {
+      allow read: if true;
+      allow write: if isValidId(bookmarkId) && isValidBookmark(incoming());
+      allow delete: if isValidId(bookmarkId);
+    }
+
+    // Allow platform config & root document matches
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}

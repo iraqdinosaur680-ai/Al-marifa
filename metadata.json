@@ -1,0 +1,6 @@
+{
+  "name": "منصة المعرفة ALmarfa platform",
+  "description": "A secure, modern student and parent portal with admin management for student performance tracking, real-time attendance, grades, and integrated video streaming.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
